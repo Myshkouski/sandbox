@@ -13,7 +13,8 @@ module.exports = {
     publicPath
   },
   generate: {
-    dir: 'docs'
+    dir: 'docs',
+    fallback: true
   },
   router: {
     base
