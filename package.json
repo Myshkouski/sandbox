@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "ssr": "nuxt",
+    "spa": "nuxt --spa",
+    "gen": "nuxt generate --spa"
+  },
+  "dependencies": {
+    "nuxt": "^1.4.2"
+  },
+  "devDependencies": {
+    "pug": "^2.0.3"
+  }
+}
