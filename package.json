@@ -2,7 +2,8 @@
   "scripts": {
     "ssr": "nuxt",
     "spa": "nuxt --spa",
-    "gen": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate --spa"
+    "gen": "nuxt generate --spa",
+    "gen:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate --spa"
   },
   "dependencies": {
     "nuxt": "^1.4.2"
