@@ -1,3 +1,5 @@
+/*global process*/
+
 let base
 let publicPath
 
@@ -10,7 +12,15 @@ module.exports = {
   srcDir: 'src/docs',
   build: {
     parallel: true,
-    publicPath
+    publicPath,
+    extend(config) {
+      const extensions = config.resolve.extensions
+      ;['.yaml', '.yml', '.pug', '.sass'].forEach(ext => {
+        if(!~extensions.indexOf(ext)) {
+          extensions.push(ext)
+        }
+      })
+    }
   },
   generate: {
     dir: 'docs',
@@ -20,7 +30,8 @@ module.exports = {
     base
   },
   head: {
-    meta: [{
+    meta: [
+      {
         charset: 'utf-8'
       },
       {

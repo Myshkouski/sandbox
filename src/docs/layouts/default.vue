@@ -1,7 +1,5 @@
-<template lang="pug">
-  nuxt
-</template>
+<template lang="pug" src="~/markup/layouts/default"></template>
 
-<script type="text/javascript" >
+<script type="text/javascript" src="~/scripts/layouts/default"></script>
 
-</script>
+<style lang="sass" src="~/styles/layouts/default" scoped></style>

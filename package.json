@@ -3,13 +3,19 @@
     "ssr": "nuxt",
     "spa": "nuxt --spa",
     "gen": "nuxt generate --spa",
-    "gen:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate --spa"
+    "gen:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate --spa",
+    "lint": "eslint src"
   },
   "dependencies": {
     "nuxt": "^1.4.2"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "pug": "^2.0.3"
+    "eslint": "^5.5.0",
+    "eslint-plugin-vue": "^4.7.1",
+    "node-sass": "^4.9.3",
+    "pug": "^2.0.3",
+    "sass-loader": "^7.1.0",
+    "stylelint": "^9.5.0"
   }
 }

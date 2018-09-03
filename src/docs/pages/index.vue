@@ -1,4 +1,4 @@
 <template lang="pug">
 div
-  h1 Docs
+	h1 Docs
 </template>
