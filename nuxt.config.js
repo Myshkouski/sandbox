@@ -1,5 +1,3 @@
-/*global process*/
-
 let base
 let publicPath
 
@@ -14,9 +12,9 @@ module.exports = {
     parallel: true,
     publicPath,
     extend(config) {
-      const extensions = config.resolve.extensions
-      ;['.yaml', '.yml', '.pug', '.sass'].forEach(ext => {
-        if(!~extensions.indexOf(ext)) {
+      const extensions = config.resolve.extensions;
+      ['.yaml', '.yml', '.pug', '.sass'].forEach(ext => {
+        if (!~extensions.indexOf(ext)) {
           extensions.push(ext)
         }
       })
@@ -26,6 +24,9 @@ module.exports = {
     dir: 'docs',
     fallback: true
   },
+  plugins: [
+    '~/plugins/debug'
+  ],
   router: {
     base
   },

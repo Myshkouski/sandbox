@@ -1,6 +1,12 @@
 /*global Ya*/
 
-(function(d, w, c) {
+const debug = require('debug')('yandex.metrika')
+
+metrika(document, window, 'yandex_metrika_callbacks2')
+
+debug('imported')
+
+function metrika(d, w, c) {
   (w[c] = w[c] || []).push(function() {
     try {
       w.yaCounter50170357 = new Ya.Metrika2({
@@ -29,4 +35,4 @@
   } else {
     f()
   }
-})(document, window, 'yandex_metrika_callbacks2')
+}
