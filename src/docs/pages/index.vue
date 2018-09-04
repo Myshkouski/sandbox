@@ -1,4 +1,3 @@
-<template lang="pug">
-div
-	h1 Docs
-</template>
+<template lang="pug" src="~/markup/pages/index"></template>
+
+<script type="text/javascript" src="~/scripts/pages/index"></script>

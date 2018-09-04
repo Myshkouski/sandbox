@@ -1,5 +1,12 @@
-const dev = process.env.NODE_ENV !== 'production'
+if (process.browser) {
+  const {
+    localStorage
+  } = window
+  const prop = 'debug'
 
-if(process.browser && dev) {
-  window.localStorage.debug = '*'
+  if (require('./isProd')) {
+    localStorage.removeItem('debug')
+  } else {
+    localStorage.setItem('debug', 'nuxt:*')
+  }
 }

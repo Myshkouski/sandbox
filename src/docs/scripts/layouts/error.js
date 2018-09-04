@@ -1,4 +1,4 @@
-const debug = require('debug')('error-page')
+const debug = require('debug')('page:error')
 
 export default {
   props: {
