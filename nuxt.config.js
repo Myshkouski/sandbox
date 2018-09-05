@@ -1,56 +1,33 @@
-let base = ''
-let path = '/_nuxt/'
+let base
+let publicPath
 
 if (process.env.DEPLOY_ENV == 'GH_PAGES') {
-  base = 'https://myshkouski.github.io'
-  path = '/sandbox/'
+  base = '/sandbox/'
+  publicPath = 'http://alexeimyshkouski-31-08-2018-1.tk' + base
 }
 
 module.exports = {
   srcDir: 'src/docs',
   build: {
     parallel: true,
-    publicPath: base + path,
-    extend(config, {
-      isClient
-    }) {
-      const mainFields = ['module', 'main']
-      if (isClient) {
-        mainFields.unshift('browser')
-      }
-      config.resolve.mainFields = mainFields
-
-      const extensions = config.resolve.extensions;
-      ['.yml', '.yaml', '.pug', '.sass'].forEach(ext => {
-        if (!~extensions.indexOf(ext)) {
-          extensions.push(ext)
-        }
-      })
-    }
+    publicPath
   },
   generate: {
     dir: 'docs',
     fallback: true
   },
-  plugins: [
-    '~/plugins/filters',
-    '~/plugins/i18n',
-    {
-      src: '~/plugins/metrika',
-      ssr: false
-    },
-    {
-      src: '~/plugins/debug',
-      ssr: false
-    }
-  ],
   router: {
     base
   },
   head: {
-    meta: [
+    meta: [{
+        charset: 'utf-8'
+      },
       {
-        hid: 'yandex-verification',
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
+      {
         name: 'yandex-verification',
         content: '72f2c5fa362f4ae3'
       }
