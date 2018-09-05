@@ -3,7 +3,7 @@ let publicPath
 
 if (process.env.DEPLOY_ENV == 'GH_PAGES') {
   base = '/sandbox/'
-  publicPath = 'https://myshkouski.github.io' + base
+  publicPath = 'http://alexeimyshkouski-31-08-2018-1.tk' + base
 }
 
 module.exports = {
