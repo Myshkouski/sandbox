@@ -16,6 +16,9 @@ module.exports = {
     dir: 'docs',
     fallback: true
   },
+  serverMiddleware: [
+    '~/api/cors'
+  ],
   router: {
     base
   },
