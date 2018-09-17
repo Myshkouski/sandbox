@@ -6,6 +6,8 @@ const Koa = require('koa')
 const KoaRouter = require('koa-router')
 const compress = require('koa-compress')
 
+const Realtime = require('@alexeimyshkouski/realtime')
+
 const mime = require('mime')
 
 const __static = path.resolve(process.cwd(), 'dist')
@@ -33,8 +35,6 @@ httpRouter
 app
   .use(httpRouter.routes())
   .use(httpRouter.allowedMethods())
-
-const Realtime = require('@alexeimyshkouski/realtime')
 
 const rt = new Realtime()
 

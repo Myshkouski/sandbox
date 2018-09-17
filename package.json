@@ -11,12 +11,21 @@
     "lint:style": "stylelint ."
   },
   "dependencies": {
+    "@alexeimyshkouski/realtime": "0.0.1",
+    "@alexeimyshkouski/realtime-server": "0.0.2",
+    "debug": "^4.0.1",
+    "koa": "^2.5.3",
+    "koa-compose": "^4.1.0",
+    "koa-compress": "^3.0.0",
+    "koa-conditional-get": "^2.0.0",
+    "koa-etag": "^3.0.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
     "nuxt": "^1.4.2",
     "vue-i18n": "^8.1.0"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "debug": "^3.1.0",
     "eslint": "^5.5.0",
     "eslint-plugin-json": "^1.2.1",
     "eslint-plugin-vue": "^4.7.1",
@@ -24,6 +33,7 @@
     "pug": "^2.0.3",
     "sass-loader": "^7.1.0",
     "stylelint": "^9.5.0",
+    "supervisor": "^0.12.0",
     "vue-filter": "^0.2.5"
   }
 }
