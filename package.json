@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node scripts/serve",
-    "serve:dev": "supervisor -- scripts/serve",
+    "serve:dev": "cross-env DEBUG=* supervisor -- scripts/serve",
     "ssr": "cross-env DEBUG=nuxt:* nuxt",
     "spa": "cross-env DEBUG=nuxt:* nuxt --spa",
     "gen": "nuxt generate --spa",
@@ -14,6 +14,7 @@
     "@alexeimyshkouski/realtime": "0.0.1",
     "@alexeimyshkouski/realtime-server": "0.0.2",
     "debug": "^4.0.1",
+    "express": "^4.16.3",
     "koa": "^2.5.3",
     "koa-compose": "^4.1.0",
     "koa-compress": "^3.0.0",

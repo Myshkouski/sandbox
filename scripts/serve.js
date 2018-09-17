@@ -9,7 +9,7 @@ const compress = require('koa-compress')
 const etag = require('koa-etag')
 const conditional = require('koa-conditional-get')
 
-const Realtime = require('@alexeimyshkouski/realtime')
+const Realtime = require('../../realtime')
 
 const mime = require('mime')
 
@@ -30,18 +30,40 @@ koa
 const rt = new Realtime()
 
 rt.hub.create('hello')
-rt.on('hello', ctx => {
-  const {
-    address
-  } = ctx.socket.address()
+rt.hub.create('connected')
+rt.hub.create('tick')
 
-  ctx.send(['!/hello', address])
-  ctx.publish(['!/connected', address])
+setInterval(() => {
+  rt.hub.publish('tick', Date.now())
+}, 1000).unref()
+
+rt.on('hello', ctx => {
+  const payload = ctx.socket.address()
+
+  ctx.send({
+    scope: '/event/hello',
+    payload
+  })
+
+  ctx.app.hub.broadcast(ctx.rooms.get(ctx.room), payload)
 })
 
 const server = http.createServer()
 
 server.on('request', koa.callback())
 server.on('upgrade', rt.callback())
+
+// const express = require('express')()
+//
+// express
+//   .get('/:a', (req, res, next) => {
+//     req.a = 'asdasdsad'
+//     next()
+//   })
+//   .get('/:b', (req, res, next) => {
+//     res.json(req.a)
+//   })
+//
+// express.listen(8080)
 
 server.listen(8080)
