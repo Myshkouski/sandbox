@@ -1,6 +1,6 @@
 const path = require('path')
 const http = require('http')
-const debug = require('debug')('server')
+const stream = require('stream')
 
 const Koa = require('koa')
 const KoaRouter = require('koa-router')
@@ -9,14 +9,18 @@ const compress = require('koa-compress')
 const etag = require('koa-etag')
 const conditional = require('koa-conditional-get')
 
-const Realtime = require('../../realtime')
+const Realtime = require('@alexeimyshkouski/realtime')
 
-const mime = require('mime')
+const debug = require('debug')('sandbox')
 
 const __static = path.resolve(process.cwd(), 'docs')
 
 const koaRouter = new KoaRouter()
 koaRouter
+  .use((ctx, next) => {
+    ctx.set('Access-Control-Allow-Origin', '*')
+    return next()
+  })
   .use(conditional())
   .use(etag())
   .use(compress())
@@ -40,10 +44,7 @@ setInterval(() => {
 rt.on('hello', ctx => {
   const payload = ctx.socket.address()
 
-  ctx.send({
-    scope: '/event/hello',
-    payload
-  })
+  ctx.send(['!/hello', payload])
 
   ctx.app.hub.broadcast(ctx.rooms.get(ctx.room), payload)
 })
@@ -52,18 +53,5 @@ const server = http.createServer()
 
 server.on('request', koa.callback())
 server.on('upgrade', rt.callback())
-
-// const express = require('express')()
-//
-// express
-//   .get('/:a', (req, res, next) => {
-//     req.a = 'asdasdsad'
-//     next()
-//   })
-//   .get('/:b', (req, res, next) => {
-//     res.json(req.a)
-//   })
-//
-// express.listen(8080)
 
 server.listen(8080)

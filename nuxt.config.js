@@ -35,7 +35,7 @@ module.exports = {
       config.resolve.mainFields = mainFields
 
       const extensions = config.resolve.extensions;
-      ['.pug', '.sass'].forEach(ext => {
+      ['.vue', '.pug', '.sass'].forEach(ext => {
         if (!~extensions.indexOf(ext)) {
           extensions.push(ext)
         }
@@ -54,12 +54,11 @@ module.exports = {
     base
   },
   head: {
-    meta: [
-      {
-        hid: 'yandex-verification',
-        name: 'yandex-verification',
-        content: '72f2c5fa362f4ae3'
-      }
-    ]
-  }
+    meta: [{
+      hid: 'yandex-verification',
+      name: 'yandex-verification',
+      content: '72f2c5fa362f4ae3'
+    }]
+  },
+  loading: false
 }
