@@ -6,7 +6,7 @@
     "spa": "cross-env DEBUG=nuxt:* nuxt --spa",
     "gen": "nuxt generate --spa",
     "gen:gh-pages": "cross-env NODE_ENV=production PUBLIC_PATH=https://myshkouski.github.io/ ROUTER_BASE=/sandbox/ nuxt generate --spa",
-    "gen:alias": "cross-env NODE_ENV=production PUBLIC_PATH=http://alexei-myshkouski.ml/ nuxt generate --spa",
+    "gen:alias": "cross-env NODE_ENV=production PUBLIC_PATH=https://alexei-myshkouski.ml/ nuxt generate --spa",
     "lint:es": "eslint .",
     "lint:style": "stylelint ."
   },
