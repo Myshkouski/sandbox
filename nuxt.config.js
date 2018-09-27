@@ -1,20 +1,27 @@
 let base = process.env.ROUTER_BASE || ''
 let path = process.env.PUBLIC_PATH || '/_nuxt/'
 
-const plugins = [
+let plugins = [
   '~/plugins/filters',
-  '~/plugins/i18n',
-  {
-    src: '~/plugins/debug',
-    ssr: false
-  }
+  '~/plugins/i18n'
 ]
 
 if (process.env.NODE_ENV === 'production') {
-  plugins.push({
-    src: '~/plugins/metrika',
-    ssr: false
-  })
+  plugins = [
+    ...plugins,
+    {
+      src: '~/plugins/metrika',
+      ssr: false
+    }
+  ]
+} else {
+  plugins = [
+    ...plugins,
+    {
+      src: '~/plugins/debug',
+      ssr: false
+    }
+  ]
 }
 
 module.exports = {
@@ -52,13 +59,11 @@ module.exports = {
     base
   },
   head: {
-    meta: [
-      {
-        hid: 'yandex-verification',
-        name: 'yandex-verification',
-        content: '72f2c5fa362f4ae3'
-      }
-    ]
+    meta: [{
+      hid: 'yandex-verification',
+      name: 'yandex-verification',
+      content: '72f2c5fa362f4ae3'
+    }]
   },
   loading: false
 }
