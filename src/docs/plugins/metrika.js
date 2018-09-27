@@ -7,7 +7,7 @@ if (process.client && require('./isProd')) {
     (w[c] = w[c] || []).push(function () {
       try {
         w.yaCounter50170357 = new Ya.Metrika2({
-          id: 50170357,
+          id: 50233789,
           clickmap: true,
           trackLinks: true,
           accurateTrackBounce: true,
