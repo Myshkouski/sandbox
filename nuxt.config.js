@@ -1,5 +1,5 @@
-let base = ''
-let path = '/_nuxt/'
+let base = process.env.ROUTER_BASE || ''
+let path = process.env.PUBLIC_PATH || '/_nuxt/'
 
 const plugins = [
   '~/plugins/filters',
@@ -10,10 +10,7 @@ const plugins = [
   }
 ]
 
-if (process.env.DEPLOY_ENV == 'GH_PAGES') {
-  base = 'https://myshkouski.github.io'
-  path = '/sandbox/'
-
+if (process.env.NODE_ENV === 'production') {
   plugins.push({
     src: '~/plugins/metrika',
     ssr: false
@@ -54,11 +51,13 @@ module.exports = {
     base
   },
   head: {
-    meta: [{
-      hid: 'yandex-verification',
-      name: 'yandex-verification',
-      content: '72f2c5fa362f4ae3'
-    }]
+    meta: [
+      {
+        hid: 'yandex-verification',
+        name: 'yandex-verification',
+        content: '72f2c5fa362f4ae3'
+      }
+    ]
   },
   loading: false
 }
