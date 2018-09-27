@@ -1,15 +1,41 @@
 {
   "scripts": {
-    "ssr": "nuxt",
-    "spa": "nuxt --spa",
+    "start": "node scripts/serve",
+    "serve:dev": "cross-env DEBUG=* supervisor -- scripts/serve",
+    "ssr": "cross-env DEBUG=nuxt:* nuxt",
+    "spa": "cross-env DEBUG=nuxt:* nuxt --spa",
     "gen": "nuxt generate --spa",
-    "gen:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate --spa"
+    "gen:gh-pages": "cross-env NODE_ENV=production PUBLIC_PATH=https://myshkouski.github.io ROUTER_BASE=/sandbox/ nuxt generate --spa",
+    "gen:alias": "cross-env NODE_ENV=production PUBLIC_PATH=http://alexei-myshkouski.ml nuxt generate --spa",
+    "lint:es": "eslint .",
+    "lint:style": "stylelint ."
   },
   "dependencies": {
+    "@alexeimyshkouski/realtime": "latest",
+    "@alexeimyshkouski/realtime-router": "latest",
+    "@alexeimyshkouski/realtime-server": "latest",
+    "debug": "^4.0.1",
+    "koa": "^2.5.3",
+    "koa-compose": "^4.1.0",
+    "koa-compress": "^3.0.0",
+    "koa-conditional-get": "^2.0.0",
+    "koa-etag": "^3.0.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "leaflet": "^1.3.4",
     "nuxt": "^1.4.2"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "pug": "^2.0.3"
+    "eslint": "^5.6.0",
+    "eslint-plugin-json": "^1.2.1",
+    "eslint-plugin-vue": "^4.7.1",
+    "node-sass": "^4.9.3",
+    "pug": "^2.0.3",
+    "sass-loader": "^7.1.0",
+    "stylelint": "^9.5.0",
+    "supervisor": "^0.12.0",
+    "vue-filter": "^0.2.5",
+    "vue-i18n": "^8.1.0"
   }
 }

@@ -1,36 +1,63 @@
-let base
-let publicPath
+let base = process.env.ROUTER_BASE || ''
+let path = process.env.PUBLIC_PATH || '/_nuxt/'
 
-if (process.env.DEPLOY_ENV == 'GH_PAGES') {
-  base = '/sandbox/'
-  publicPath = 'http://alexeimyshkouski-31-08-2018-1.tk' + base
+const plugins = [
+  '~/plugins/filters',
+  '~/plugins/i18n',
+  {
+    src: '~/plugins/debug',
+    ssr: false
+  }
+]
+
+if (process.env.NODE_ENV === 'production') {
+  plugins.push({
+    src: '~/plugins/metrika',
+    ssr: false
+  })
 }
 
 module.exports = {
   srcDir: 'src/docs',
   build: {
     parallel: true,
-    publicPath
+    publicPath: base + path,
+    extend(config, {
+      isClient
+    }) {
+      const mainFields = ['module', 'main']
+      if (isClient) {
+        mainFields.unshift('browser')
+      }
+      config.resolve.mainFields = mainFields
+
+      const extensions = config.resolve.extensions;
+      ['.vue', '.pug', '.sass'].forEach(ext => {
+        if (!~extensions.indexOf(ext)) {
+          extensions.push(ext)
+        }
+      })
+    }
   },
   generate: {
     dir: 'docs',
     fallback: true
   },
+  plugins,
+  serverMiddleware: [
+    __dirname + '/api/cors'
+  ],
   router: {
     base
   },
   head: {
-    meta: [{
-        charset: 'utf-8'
-      },
+    meta: [
       {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
-      },
-      {
+        hid: 'yandex-verification',
         name: 'yandex-verification',
         content: '72f2c5fa362f4ae3'
       }
     ]
-  }
+  },
+  loading: false
 }
