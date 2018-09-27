@@ -21,7 +21,7 @@ module.exports = {
   srcDir: 'src/docs',
   build: {
     parallel: true,
-    publicPath: base + path,
+    publicPath: path,
     extend(config, {
       isClient
     }) {
@@ -31,8 +31,9 @@ module.exports = {
       }
       config.resolve.mainFields = mainFields
 
+      const additionalExtensions = ['.pug', '.sass']
       const extensions = config.resolve.extensions;
-      ['.vue', '.pug', '.sass'].forEach(ext => {
+      additionalExtensions.forEach(ext => {
         if (!~extensions.indexOf(ext)) {
           extensions.push(ext)
         }

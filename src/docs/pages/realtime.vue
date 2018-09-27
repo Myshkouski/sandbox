@@ -222,8 +222,8 @@ export default {
     },
 
     send(type, room, payload) {
-			const scope = type + '/' + room
-			const data = [scope, payload].filter(value => !!value)
+      const scope = type + '/' + room
+      const data = [scope, payload].filter(value => !!value)
 
       this.ws.send(JSON.stringify(data))
 
@@ -236,20 +236,20 @@ export default {
     }
   },
 
-  head() {
-    return {
-      meta: [{
-          charset: 'utf-8'
-        },
-        {
-          name: 'viewport',
-          content: 'width=device-width, initial-scale=1'
-        }
-      ]
-    }
-  },
+	  head() {
+	    return {
+	      meta: [{
+	          charset: 'utf-8'
+	        },
+	        {
+	          name: 'viewport',
+	          content: 'width=device-width, initial-scale=1'
+	        }
+	      ]
+	    }
+	  },
 
-  async mounted() {
+	  async mounted() {
     const host = window.location.hostname + ':8080'
     const protocols = ['json']
     const reconnect = 1000
