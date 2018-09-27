@@ -49,7 +49,7 @@ export default {
 		})
 
 		const markerIcon = new Leaflet.Icon({
-			iconUrl: 'img/water-drop.png',
+			iconUrl: '/img/water-drop.png',
 			iconSize: [50, 50],
 			// iconAnchor: [20, 20],
 			// popupAnchor: [-3, -76],
