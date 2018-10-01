@@ -1,6 +1,23 @@
 .map
-  position: relative
-  overflow: hidden
-  width: 100%
-  height: 100vh
-  cursor: crosshair
+	position: relative
+	height: 100vh
+	z-index: 0
+
+.locate
+	position: absolute
+	overflow: hidden
+	width: 3rem
+	height: 3rem
+	left: 1.5rem
+	bottom: 1.5rem
+	z-index: 99
+	background-color: #fff
+	border-radius: 50%
+	background-image: url("https://cdn3.iconfinder.com/data/icons/transport-3-8/128/Location-Auto-Locate-Current-Location-Geo-512.png")
+	background-size: 2.0rem
+	background-position: .5rem .5rem
+	background-repeat: no-repeat
+
+@media (max-width: 1023px)
+	.leaflet-control-attribution
+		// display: none

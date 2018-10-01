@@ -1,102 +1,135 @@
-<template lang="pug">
-div.map(ref="map")
-</template>
+<template lang="pug" src="~/templates/pages/map"></template>
 
 <script>
+let Leaflet = {}
+
+if (process.client) {
+	Leaflet = require('leaflet')
+}
+
 export default {
-  data() {
-    return {
-      markers: []
-    }
-  },
+	data() {
+		return {
+			location: [53, 26],
+			locationMarker: null,
+			zoom: 5,
+			markers: [],
+			map: null
+		}
+	},
 
-  watch: {
-    markers(to, from) {
-      window.localStorage.setItem('leaflet:markers', JSON.stringify(to))
-    }
-  },
+	watch: {
+		markers(to, from) {
+			window.localStorage.setItem('leaflet:markers', JSON.stringify(to))
+		},
+		location: {
+			handler: '_setLocationMarker'
+		}
+	},
 
-  mounted() {
-    const Leaflet = require('leaflet')
+	methods: {
+		locate() {
+			const {
+				map
+			} = this
 
-    this.markers = JSON.parse(window.localStorage.getItem('leaflet:markers') || '[]')
+			map.locate({
+				enableHighAccuracy: true,
+				timeout: 6e4
+			}).once('locationfound', event => {
+				this.location = [
+					event.latlng.lat,
+					event.latlng.lng
+				]
 
-    const map = new Leaflet.map(this.$refs.map, {
-      zoomControl: false,
-      attributionControl: false
-    })
+				this.zoom = 12
 
-    const attribution = Leaflet.control.attribution({
-      position: 'bottomright',
-      prefix: 'Drink&Piss'
-    }).addTo(map)
+				map.setView(this.location, this.zoom)
+			}).once('locationerror', event => {
+				console.error('locationerror', event)
+			})
+		},
 
-    const tileLayer = Leaflet.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.{ext}', {
-      attribution: 'Powered by OpenStreetMaps',
-      minZoom: 1,
-      maxZoom: 16,
-      ext: 'png'
-    }).addTo(map)
+		_setLocationMarker() {
+			if (!this.locationMarker) {
+				const locationIcon = new Leaflet.Icon({
+					iconUrl: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png',
+					iconSize: [50, 50],
+					// iconAnchor: [20, 20],
+					// popupAnchor: [-3, -76],
+					// shadowUrl: 'my-icon-shadow.png',
+					// shadowSize: [68, 95],
+					// shadowAnchor: [22, 94]
+				})
 
-    const locationIcon = new Leaflet.Icon({
-      iconUrl: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png',
-      iconSize: [50, 50],
-      iconAnchor: [0, 0],
-      // popupAnchor: [-3, -76],
-      // shadowUrl: 'my-icon-shadow.png',
-      // shadowSize: [68, 95],
-      // shadowAnchor: [22, 94]
-    })
+				this.locationMarker = new Leaflet.Marker(this.location, {
+					icon: locationIcon
+				}).addTo(this.map)
+			}
 
-    const markerIcon = new Leaflet.Icon({
-      iconUrl: '/img/water-drop.png',
-      iconSize: [50, 50],
-      iconAnchor: [25, 0],
-      popupAnchor: [0, 0],
-      // shadowUrl: 'my-icon-shadow.png',
-      // shadowSize: [68, 95],
-      // shadowAnchor: [22, 94]
-    })
+			this.locationMarker.setLatLng(this.location)
+		}
+	},
 
-    function _createMarker(latlng) {
-      const marker = new L.Marker(latlng, {
-        icon: markerIcon
-      })
+	mounted() {
+		this.markers = JSON.parse(window.localStorage.getItem('leaflet:markers') || '[]')
 
-      return marker
-    }
+		const map = new Leaflet.map(this.$refs.map, {
+			zoomControl: false,
+			attributionControl: false
+		})
 
-    this.markers.forEach(latlng => {
-      _createMarker(latlng).addTo(map)
-    })
+		this.map = map
 
-    map.locate({
-      enableHighAccuracy: true
-    }).once('locationfound', event => {
-      const latlng = [
-        event.latlng.lat,
-        event.latlng.lng
-      ]
-      map.setView(latlng, 12)
-      const marker = new L.Marker(latlng, {
-        icon: locationIcon
-      }).addTo(map)
+		map.setView(this.location, this.zoom)
+		setImmediate(() => {
+			this.locate()
+		})
 
-      marker.bindTooltip("I'm here!", {
-        direction: 'bottom',
-        offset: [25, 50]
-      }).openTooltip()
-    }).on('click', event => {
-      const latlng = [
-        event.latlng.lat,
-        event.latlng.lng
-      ]
-      this.markers.push(latlng)
-      _createMarker(latlng).addTo(map)
-    })
-  }
+		const attribution = Leaflet.control.attribution({
+			position: 'bottomright',
+			prefix: 'Drink&Piss'
+		}).addTo(map)
+
+		const tileLayer = Leaflet.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.{ext}', {
+			attribution: 'Powered by OpenStreetMaps',
+			minZoom: 1,
+			maxZoom: 16,
+			ext: 'png'
+		}).addTo(map)
+
+		const markerIcon = new Leaflet.Icon({
+			iconUrl: '/img/water-drop.png',
+			iconSize: [50, 50],
+			// iconAnchor: [20, 20],
+			// popupAnchor: [-3, -76],
+			// shadowUrl: 'my-icon-shadow.png',
+			// shadowSize: [68, 95],
+			// shadowAnchor: [22, 94]
+		})
+
+		this.markers.forEach(latlng => {
+			new Leaflet.Marker(latlng, {
+				icon: markerIcon
+			}).addTo(map)
+		})
+
+		map.on('click', event => {
+			const latlng = [
+				event.latlng.lat,
+				event.latlng.lng
+			]
+			this.markers.push(latlng)
+			new L.Marker([
+				event.latlng.lat,
+				event.latlng.lng
+			], {
+				icon: markerIcon
+			}).addTo(map)
+		})
+	}
 }
 </script>
 
 <style src="leaflet/dist/leaflet.css"></style>
-<style lang="sass" src="~/styles/pages/map"></style>
+<style lang="sass" src="~/styles/pages/map" scoped></style>
