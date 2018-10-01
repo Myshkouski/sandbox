@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-module.exports = {
+export default {
   srcDir: 'src/docs',
   build: {
     parallel: true,
@@ -32,7 +32,7 @@ module.exports = {
       config.resolve.mainFields = mainFields
 
       const additionalExtensions = ['.pug', '.sass']
-      const extensions = config.resolve.extensions;
+      const extensions = config.resolve.extensions
       additionalExtensions.forEach(ext => {
         if (!~extensions.indexOf(ext)) {
           extensions.push(ext)

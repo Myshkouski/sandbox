@@ -1,0 +1,10 @@
+div
+	div
+		span History
+		span {{ ' ' }}
+		input(type="number" v-model="historyLength")
+	div(v-for="message of messageHistory")
+		span(v-if="message.type" style="color:#0f0") {{'\u25BE'}}
+		span(v-else style="color:#00f") {{'\u25B4'}}
+		span {{message.transport}}
+		span {{message.data}}
