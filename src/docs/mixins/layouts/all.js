@@ -1,5 +1,3 @@
-const debug = require('debug')('nuxt:layout-default')
-
 export default {
   head() {
     const head = {
@@ -11,12 +9,12 @@ export default {
         {
           hid: 'viewport',
           name: 'viewport',
-          content: 'width=device-width, initial-scale=1'
+          content: 'width=device-width,initial-scale=1'
         }
       ]
     }
 
-    debug('head', head)
+    console.log('!!!')
 
     return head
   }

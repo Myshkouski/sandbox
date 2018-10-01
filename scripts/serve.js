@@ -15,21 +15,16 @@ const debug = require('debug')('sandbox')
 
 const __static = path.resolve(process.cwd(), 'docs')
 
-const koaRouter = new KoaRouter()
-koaRouter
+const koa = new Koa()
+koa
   .use((ctx, next) => {
-    ctx.set('Access-Control-Allow-Origin', '*')
+    ctx.set('Access-Control-Allow-Origin', 'localhost')
     return next()
   })
   .use(conditional())
   .use(etag())
   .use(compress())
   .use(serve(__static))
-
-const koa = new Koa()
-koa
-  .use(koaRouter.routes())
-  .use(koaRouter.allowedMethods())
 
 const rt = new Realtime()
 
@@ -54,4 +49,8 @@ const server = http.createServer()
 server.on('request', koa.callback())
 server.on('upgrade', rt.callback())
 
-server.listen(8080)
+const port = 3000
+const host = '0.0.0.0'
+server.listen(port, host, () => {
+  debug('Listening on %s:%d', host, port)
+})

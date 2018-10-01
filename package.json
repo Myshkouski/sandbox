@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "start": "node scripts/serve",
+    "serve": "node scripts/serve",
     "serve:dev": "cross-env DEBUG=* supervisor -- scripts/serve",
-    "ssr": "cross-env DEBUG=nuxt:* nuxt",
-    "spa": "cross-env DEBUG=nuxt:* nuxt --spa",
+    "ssr": "cross-env DEBUG=nuxt:* NUXT_HOST=0.0.0.0 nuxt",
+    "spa": "cross-env DEBUG=nuxt:* NUXT_HOST=0.0.0.0 nuxt --spa",
     "gen": "nuxt generate --spa",
     "gen:gh-pages": "cross-env NODE_ENV=production PUBLIC_PATH=https://myshkouski.github.io/ ROUTER_BASE=/sandbox/ nuxt generate --spa",
     "gen:alias": "cross-env NODE_ENV=production PUBLIC_PATH=https://alexei-myshkouski.ml/ nuxt generate --spa",
@@ -30,6 +30,7 @@
     "eslint": "^5.6.0",
     "eslint-plugin-json": "^1.2.1",
     "eslint-plugin-vue": "^4.7.1",
+    "lodash": "^4.17.11",
     "node-sass": "^4.9.3",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
