@@ -1,133 +1,154 @@
 <template lang="pug" src="~/templates/pages/map"></template>
 
 <script>
-let Leaflet = {}
+import debounce from 'lodash.debounce'
 
+let Leaflet = {}
 if (process.client) {
-	Leaflet = require('leaflet')
+  Leaflet = require('leaflet')
 }
 
 export default {
-	data() {
-		return {
-			location: [53, 26],
-			locationMarker: null,
-			zoom: 5,
-			markers: [],
-			map: null
-		}
-	},
+  data() {
+    return {
+      location: [53, 26],
+      locationMarker: null,
+      zoom: 5,
+      markers: [],
+      map: null,
+      style: {
+        map: {
+          height: '100%'
+        }
+      }
+    }
+  },
 
-	watch: {
-		markers(to, from) {
-			window.localStorage.setItem('leaflet:markers', JSON.stringify(to))
-		},
-		location: {
-			handler: '_setLocationMarker'
-		}
-	},
+  watch: {
+    markers(to, from) {
+      window.localStorage.setItem('leaflet:markers', JSON.stringify(to))
+    },
+    location: {
+      handler: '_setLocationMarker'
+    }
+  },
 
-	methods: {
-		locate() {
-			const {
-				map
-			} = this
+  methods: {
+    locate() {
+      const {
+        map
+      } = this
 
-			map.locate({
-				enableHighAccuracy: true,
-				timeout: 6e4
-			}).once('locationfound', event => {
-				this.location = [
-					event.latlng.lat,
-					event.latlng.lng
-				]
+      map.locate({
+        enableHighAccuracy: true,
+        timeout: 6e4
+      }).once('locationfound', event => {
+        this.location = [
+          event.latlng.lat,
+          event.latlng.lng
+        ]
 
-				this.zoom = 12
+        this.zoom = 12
 
-				map.setView(this.location, this.zoom)
-			}).once('locationerror', event => {
-				console.error('locationerror', event)
-			})
-		},
+        map.setView(this.location, this.zoom)
+      }).once('locationerror', event => {
+        console.error('locationerror', event)
+      })
+    },
 
-		_setLocationMarker() {
-			if (!this.locationMarker) {
-				const locationIcon = new Leaflet.Icon({
-					iconUrl: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png',
-					iconSize: [50, 50],
-					// iconAnchor: [20, 20],
-					// popupAnchor: [-3, -76],
-					// shadowUrl: 'my-icon-shadow.png',
-					// shadowSize: [68, 95],
-					// shadowAnchor: [22, 94]
-				})
+    _setLocationMarker() {
+      if (!this.locationMarker) {
+        const locationIcon = new Leaflet.Icon({
+          iconUrl: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png',
+          iconSize: [50, 50],
+          // iconAnchor: [20, 20],
+          // popupAnchor: [-3, -76],
+          // shadowUrl: 'my-icon-shadow.png',
+          // shadowSize: [68, 95],
+          // shadowAnchor: [22, 94]
+        })
 
-				this.locationMarker = new Leaflet.Marker(this.location, {
-					icon: locationIcon
-				}).addTo(this.map)
-			}
+        this.locationMarker = new Leaflet.Marker(this.location, {
+          icon: locationIcon
+        }).addTo(this.map)
+      }
 
-			this.locationMarker.setLatLng(this.location)
-		}
-	},
+      this.locationMarker.setLatLng(this.location)
+    },
 
-	mounted() {
-		this.markers = JSON.parse(window.localStorage.getItem('leaflet:markers') || '[]')
+    // _handleWindowResizeEvent: debounce(function() {
+    //   requestAnimationFrame(() => {
+    //     this.style.map.height = window.innerHeight
+    //   })
+    // }, 1e3 / 60, {
+    //   leading: true
+    // })
+  },
 
-		const map = new Leaflet.map(this.$refs.map, {
-			zoomControl: false,
-			attributionControl: false
-		})
+  // beforeDestroy() {
+  //   window.removeEventListener('resize', this._handleWindowResizeEvent)
+  // },
 
-		this.map = map
+  mounted() {
+    // this._handleWindowResizeEvent()
+    // window.addEventListener('resize', this._handleWindowResizeEvent)
 
-		map.setView(this.location, this.zoom)
-		setImmediate(() => {
-			this.locate()
-		})
+    this.markers = JSON.parse(window.localStorage.getItem('leaflet:markers') || '[]')
 
-		const attribution = Leaflet.control.attribution({
-			position: 'bottomright',
-			prefix: 'Drink&Piss'
-		}).addTo(map)
+    const map = new Leaflet.map(this.$refs.map, {
+      zoomControl: false,
+      attributionControl: false
+    })
 
-		const tileLayer = Leaflet.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.{ext}', {
-			attribution: 'Powered by OpenStreetMaps',
-			minZoom: 1,
-			maxZoom: 16,
-			ext: 'png'
-		}).addTo(map)
+    this.map = map
 
-		const markerIcon = new Leaflet.Icon({
-			iconUrl: '/img/water-drop.png',
-			iconSize: [50, 50],
-			// iconAnchor: [20, 20],
-			// popupAnchor: [-3, -76],
-			// shadowUrl: 'my-icon-shadow.png',
-			// shadowSize: [68, 95],
-			// shadowAnchor: [22, 94]
-		})
+    map.setView(this.location, this.zoom)
+    setImmediate(() => {
+      this.locate()
+    })
 
-		this.markers.forEach(latlng => {
-			new Leaflet.Marker(latlng, {
-				icon: markerIcon
-			}).addTo(map)
-		})
+    const attribution = Leaflet.control.attribution({
+      position: 'bottomright',
+      prefix: 'Drink&Piss'
+    }).addTo(map)
 
-		map.on('click', event => {
-			const latlng = [
-				event.latlng.lat,
-				event.latlng.lng
-			]
-			this.markers.push(latlng)
-			new L.Marker([
-				event.latlng.lat,
-				event.latlng.lng
-			], {
-				icon: markerIcon
-			}).addTo(map)
-		})
-	}
+    const tileLayer = Leaflet.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.{ext}', {
+      attribution: 'Powered by OpenStreetMaps',
+      minZoom: 1,
+      maxZoom: 16,
+      ext: 'png'
+    }).addTo(map)
+
+    const markerIcon = new Leaflet.Icon({
+      iconUrl: '/img/water-drop.png',
+      iconSize: [50, 50],
+      // iconAnchor: [20, 20],
+      // popupAnchor: [-3, -76],
+      // shadowUrl: 'my-icon-shadow.png',
+      // shadowSize: [68, 95],
+      // shadowAnchor: [22, 94]
+    })
+
+    this.markers.forEach(latlng => {
+      new Leaflet.Marker(latlng, {
+        icon: markerIcon
+      }).addTo(map)
+    })
+
+    map.on('click', event => {
+      const latlng = [
+        event.latlng.lat,
+        event.latlng.lng
+      ]
+      this.markers.push(latlng)
+      new L.Marker([
+        event.latlng.lat,
+        event.latlng.lng
+      ], {
+        icon: markerIcon
+      }).addTo(map)
+    })
+  }
 }
 </script>
 

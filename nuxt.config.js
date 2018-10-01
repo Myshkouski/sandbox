@@ -51,6 +51,11 @@ export default {
     dir: 'docs',
     fallback: true
   },
+  render: {
+    http2: {
+      push: true
+    }
+  },
   plugins,
   serverMiddleware: [
     __dirname + '/api/cors'
@@ -65,5 +70,6 @@ export default {
       content: '72f2c5fa362f4ae3'
     }]
   },
-  loading: false
+  loading: false,
+  loadingIndicator: false
 }
